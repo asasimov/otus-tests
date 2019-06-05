@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <Property name="fileNamePattern">${date:yyyy-MM-dd-HH-mm-ss}</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%highlight{[%d{HH:mm:ss.SSS}] | %-5p | %-32.42t | %-32.42c{1} | %m%n}{FATAL=red blink, ERROR=red blink, WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}"/>
+        </Console>
+        <File name="File" fileName="logs/app-${fileNamePattern}.log" immediateFlush="false" append="false">
+            <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
