@@ -1,12 +1,10 @@
 package app;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.BrowserType;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 public abstract class TestBase {
@@ -14,14 +12,11 @@ public abstract class TestBase {
 
     protected WebDriver wd;
 
-    @BeforeClass
-    public static void setUpClass() {
-        WebDriverManager.chromedriver().setup();
-    }
-
     @BeforeMethod
     public void setUpMethod() {
-        wd = new ChromeDriver();
+        wd = WebDriverFactory.createNewDriver(
+                System.getProperty("browser", BrowserType.CHROME)
+        );
     }
 
     @AfterMethod(alwaysRun = true)
