@@ -7,6 +7,8 @@ import org.openqa.selenium.remote.BrowserType;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+import java.util.concurrent.TimeUnit;
+
 public abstract class TestBase {
     protected static final Logger logger = LogManager.getLogger(TestBase.class);
 
@@ -17,6 +19,11 @@ public abstract class TestBase {
         wd = WebDriverFactory.createNewDriver(
                 System.getProperty("browser", BrowserType.CHROME)
         );
+
+        wd.manage().timeouts()
+                .implicitlyWait(4, TimeUnit.SECONDS)
+                .pageLoadTimeout(10, TimeUnit.SECONDS)
+                .setScriptTimeout(10, TimeUnit.SECONDS);
     }
 
     @AfterMethod(alwaysRun = true)

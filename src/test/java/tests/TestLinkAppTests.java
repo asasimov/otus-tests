@@ -4,7 +4,6 @@ import app.TestBase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeMethod;
@@ -14,16 +13,19 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 
 public class TestLinkAppTests extends TestBase {
 
     private final String SUITE_NAME = "Test suite #" + System.currentTimeMillis();
     private final String APP_URL = "http://localhost/TestLink/";
+    private WebDriverWait wait;
     private Actions action;
 
     @BeforeMethod
     public void before(){
         action = new Actions(wd);
+        wait = new WebDriverWait(wd, 5);
     }
 
     @Test
@@ -96,11 +98,11 @@ public class TestLinkAppTests extends TestBase {
         //проверяем цвета в левой панеле
         this.goToTreeFrame();
         assertThat(
-                (new WebDriverWait(wd, 5)).until(ExpectedConditions.elementToBeClickable(By.xpath("//span[contains(text(), 'case1')]"))).getCssValue("background-color"),
+                wait.until(elementToBeClickable(By.xpath("//span[contains(text(), 'case1')]"))).getCssValue("background-color"),
                 equalTo(lightPassedClassColor)
         );
         assertThat(
-                (new WebDriverWait(wd, 5)).until(ExpectedConditions.elementToBeClickable(By.xpath("//span[contains(text(), 'case2')]"))).getCssValue("background-color"),
+                wait.until(elementToBeClickable(By.xpath("//span[contains(text(), 'case2')]"))).getCssValue("background-color"),
                 equalTo(lightFailedClassColor)
         );
 
@@ -146,8 +148,7 @@ public class TestLinkAppTests extends TestBase {
         this.goToMenuItem("Test Specification");
 
         this.goToTreeFrame();
-        (new WebDriverWait(wd, 3))
-                .until(ExpectedConditions.elementToBeClickable(By.xpath(String.format("//span[contains(text(), '%s')]", suiteName)))).click();
+        wait.until(elementToBeClickable(By.xpath(String.format("//span[contains(text(), '%s')]", suiteName)))).click();
 
         this.goToWorkFrame();
         wd.findElement(By.xpath("//div[@class='workBack']/img[@title='Actions']")).click();
@@ -176,8 +177,9 @@ public class TestLinkAppTests extends TestBase {
 
         this.goToWorkFrame();
         wd.findElement(By.name("create_step")).click();
-        wd.switchTo().frame((new WebDriverWait(wd, 3))
-                .until(ExpectedConditions.elementToBeClickable(By.cssSelector("iframe.cke_wysiwyg_frame.cke_reset"))));
+        wd.switchTo().frame(
+                wait.until(elementToBeClickable(By.cssSelector("iframe.cke_wysiwyg_frame.cke_reset")))
+        );
 
         wd.findElement(By.cssSelector("body > p")).click();
         action.sendKeys("Add step actions").build().perform();
@@ -193,9 +195,8 @@ public class TestLinkAppTests extends TestBase {
 
     private void openSuiteFolder(String suiteName){
         this.goToTreeFrame();
-        WebElement until = (new WebDriverWait(wd, 3))
-                .until(ExpectedConditions.elementToBeClickable(By.xpath(String.format("//span[contains(text(), '%s')]", suiteName))));
-        action.doubleClick(until).perform();
+        WebElement element = wait.until(elementToBeClickable(By.xpath(String.format("//span[contains(text(), '%s')]", suiteName))));
+        action.doubleClick(element).perform();
     }
 
     private void createTestSuite(String suiteName){
@@ -228,7 +229,6 @@ public class TestLinkAppTests extends TestBase {
     }
 
     private void clickOnTestCase(String caseName){
-        (new WebDriverWait(wd, 5))
-                .until(ExpectedConditions.elementToBeClickable(By.xpath(String.format("//span[contains(text(), '%s')]", caseName)))).click();
+        wait.until(elementToBeClickable(By.xpath(String.format("//span[contains(text(), '%s')]", caseName)))).click();
     }
 }
