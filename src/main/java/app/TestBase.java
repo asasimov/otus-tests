@@ -1,8 +1,11 @@
 package app;
 
+import net.lightbody.bmp.core.har.Har;
+import net.lightbody.bmp.proxy.ProxyServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.BrowserType;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -10,25 +13,39 @@ import org.testng.annotations.BeforeMethod;
 import java.util.concurrent.TimeUnit;
 
 public abstract class TestBase {
-    protected static final Logger logger = LogManager.getLogger(TestBase.class);
 
+    protected static final Logger logger = LogManager.getLogger(TestBase.class);
     protected WebDriver wd;
 
+    private ProxyServer proxy;
+
     @BeforeMethod
-    public void setUpMethod() {
+    public void setUpMethod() throws Exception {
+        proxy = new ProxyServer(5555);
+        proxy.start();
+
+        ChromeOptions options = new ChromeOptions();
+        options.setCapability("proxy", proxy.seleniumProxy());
+
         wd = WebDriverFactory.createNewDriver(
-                System.getProperty("browser", BrowserType.CHROME)
+                System.getProperty("browser", BrowserType.CHROME), options
         );
 
         wd.manage().timeouts()
                 .implicitlyWait(4, TimeUnit.SECONDS)
                 .pageLoadTimeout(10, TimeUnit.SECONDS)
                 .setScriptTimeout(10, TimeUnit.SECONDS);
+
+        proxy.newHar("new_har");
     }
 
     @AfterMethod(alwaysRun = true)
-    public void teardown() {
-        if (wd != null)
-            wd.quit();
+    public void teardown() throws Exception {
+        if (wd != null) wd.quit();
+        if (proxy != null) {
+            Har har = proxy.getHar();
+            logger.info(har);
+            proxy.stop();
+        }
     }
 }
