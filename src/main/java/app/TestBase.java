@@ -1,6 +1,6 @@
 package app;
 
-import net.lightbody.bmp.core.har.Har;
+import net.lightbody.bmp.core.har.HarEntry;
 import net.lightbody.bmp.proxy.ProxyServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +25,7 @@ public abstract class TestBase {
         proxy.start();
 
         ChromeOptions options = new ChromeOptions();
-        options.setCapability("proxy", proxy.seleniumProxy());
+//        options.setCapability("proxy", proxy.seleniumProxy());
 
         wd = WebDriverFactory.createNewDriver(
                 System.getProperty("browser", BrowserType.CHROME), options
@@ -33,7 +33,7 @@ public abstract class TestBase {
 
         wd.manage().timeouts()
                 .implicitlyWait(4, TimeUnit.SECONDS)
-                .pageLoadTimeout(10, TimeUnit.SECONDS)
+                .pageLoadTimeout(15, TimeUnit.SECONDS)
                 .setScriptTimeout(10, TimeUnit.SECONDS);
 
         proxy.newHar("new_har");
@@ -43,8 +43,12 @@ public abstract class TestBase {
     public void teardown() throws Exception {
         if (wd != null) wd.quit();
         if (proxy != null) {
-            Har har = proxy.getHar();
-            logger.info(har);
+            int i = 0;
+            for(HarEntry entry : proxy.getHar().getLog().getEntries()){
+                logger.info("request " + (++i) + ":");
+                logger.info("URL: " + entry.getRequest().getUrl());
+                logger.info("DateTime: " + entry.getStartedDateTime());
+            }
             proxy.stop();
         }
     }
