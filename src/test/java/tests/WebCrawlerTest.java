@@ -43,7 +43,7 @@ public class WebCrawlerTest extends TestBase {
                 retryCount = 0;
             } else {
                 retryCount++;
-                if(retryCount > 10) break;
+                if(retryCount > 50) break;
             }
         }
         logger.info("Product count = " + productCount);
@@ -81,8 +81,7 @@ public class WebCrawlerTest extends TestBase {
 
     private String getAuthorsName() {
         return wd.findElement(By.cssSelector("div.authors")).findElements(By.cssSelector("a > span"))
-                .stream().map(WebElement::getText).collect(toList())
-                .stream().collect(joining(" "));
+                .stream().map(WebElement::getText).collect(joining(" "));
     }
 
     private String getProductName(){
@@ -97,7 +96,7 @@ public class WebCrawlerTest extends TestBase {
         try {
             return wd.findElement(By.cssSelector("a.nkk-file-download__link[href$='.pdf']")).getAttribute("href");
         } catch (NoSuchElementException ex){
-            return "";
+            return "NO_LINK";
         }
     }
 }
