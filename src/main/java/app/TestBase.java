@@ -32,7 +32,7 @@ public abstract class TestBase {
         );
 
         wd.manage().timeouts()
-                .implicitlyWait(4, TimeUnit.SECONDS)
+                .implicitlyWait(5, TimeUnit.SECONDS)
                 .pageLoadTimeout(15, TimeUnit.SECONDS)
                 .setScriptTimeout(10, TimeUnit.SECONDS);
 
@@ -51,5 +51,9 @@ public abstract class TestBase {
             }
             proxy.stop();
         }
+    }
+
+    protected void deleteAllCookies(WebDriver wd){
+        wd.manage().deleteAllCookies();
     }
 }
