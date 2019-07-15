@@ -1,0 +1,16 @@
+<suite name="Test Suite" verbose="1">
+    <test name="Account Test">
+        <parameter name="login" value="" />
+        <parameter name="password" value="" />
+        <classes>
+            <class name="tests.OtusAccountTest">
+                <parameter name="lastName" value="Testov" />
+                <parameter name="date" value="01.01.2000" />
+                <parameter name="country" value="RUSSIA" />
+                <parameter name="city" value="Москва" />
+                <parameter name="facebook" value="facebook.com" />
+                <parameter name="skype" value="skype.com" />
+            </class>
+        </classes>
+    </test>
+</suite>

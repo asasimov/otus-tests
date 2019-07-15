@@ -1,6 +1,5 @@
 package tests;
 
-import app.TestBase;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.BeforeMethod;

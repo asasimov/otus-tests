@@ -1,5 +1,6 @@
-package app;
+package tests;
 
+import app.WebDriverFactory;
 import net.lightbody.bmp.core.har.HarEntry;
 import net.lightbody.bmp.proxy.ProxyServer;
 import org.apache.logging.log4j.LogManager;

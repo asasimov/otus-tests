@@ -1,6 +1,5 @@
 package tests;
 
-import app.TestBase;
 import enums.Country;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -14,20 +13,13 @@ import static org.hamcrest.Matchers.equalTo;
 public class OtusAccountTest extends TestBase {
 
     @Test
-    @Parameters({"login", "password"})
-    public void testOtusAccount(String login, String password){
-        final String lastName = "Тестов";
-        final String date = "01.01.2000";
-        final Country country = Country.RUSSIA;
-        final String city = "Москва";
-        final String facebook = "facebook.com";
-        final String skype = "skype.com";
-
+    @Parameters({"login", "password", "lastName", "date", "country", "city", "facebook", "skype"})
+    public void testOtusAccount(String login, String password, String lastName, String date, String country, String city, String facebook, String skype){
         PersonalPage personalPage = new StartPage(wd).logIn(login, password)
                 .goToAccountPage().goToPersonalPage();
 
         personalPage.addLastName(lastName).addDateOfBirth(date)
-                .addCountry(country).addCity(city).isReadyToRelocate(true)
+                .addCountry(Country.valueOf(country)).addCity(city).isReadyToRelocate(true)
                 .addCommunicationMethod(FACEBOOK, 0, facebook)
                 .addCommunicationMethod(SKYPE, 1, skype)
                 .clickSaveButton();
@@ -38,7 +30,7 @@ public class OtusAccountTest extends TestBase {
 
         assertThat(personalPage.getLastName(), equalTo(lastName));
         assertThat(personalPage.getDateOfBirth(), equalTo(date));
-        assertThat(personalPage.getCountry(), equalTo(country.getName()));
+        assertThat(personalPage.getCountry(), equalTo(Country.valueOf(country).getName()));
         assertThat(personalPage.getCity(), equalTo(city));
         assertThat(personalPage.getContactData(0), equalTo(facebook));
         assertThat(personalPage.getContactData(1), equalTo(skype));

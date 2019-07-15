@@ -1,6 +1,5 @@
 package tests;
 
-import app.TestBase;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;

@@ -53,8 +53,7 @@ public class PersonalPage extends Page {
     }
 
     public PersonalPage isReadyToRelocate(boolean flag){
-        if(flag) click(readyToRelocateIsTrue);
-        else click(readyToRelocateIsFalse);
+        click(flag ? readyToRelocateIsTrue : readyToRelocateIsFalse);
         return this;
     }
 

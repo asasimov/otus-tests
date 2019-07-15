@@ -15,8 +15,9 @@ public class StartPage extends Page {
         super(wd);
         wd.navigate().to("https://otus.ru/");
 
-        if (!wd.getCurrentUrl().contains("otus.ru")) {
+        if (!wd.getTitle().contains("OTUS")) {
             logger.error("Current URL: {}", wd.getCurrentUrl());
+            logger.error("Title: {}", wd.getTitle());
             throw new IllegalStateException("This is not otus.ru page.");
         }
     }
